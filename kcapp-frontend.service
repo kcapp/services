@@ -1,0 +1,10 @@
+[Unit]
+Description=kcapp-frontend-service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/kcapp-frontend
+Restart=on-failure
+

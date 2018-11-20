@@ -1,0 +1,10 @@
+[Unit]
+Description=kcapp-api-ervice
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/kcapp-api $GOPATH/src/github.com/kcapp/api/config/config.yaml
+Restart=on-failure
+
