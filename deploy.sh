@@ -26,7 +26,7 @@ git_pull() {
 	local branch=$(git branch | grep \* | cut -d ' ' -f2)
 	echo -ne "Pulling latest changes from '\e[34m$branch\e[39m'"
 	local status=$(git pull)
-	if [ "$status" == "Already up to date." ] ; then
+	if [[ "$status" == Already* ]] ; then
 	    echo -e " - \e[32mUp to date\e[39m!"
 	    return 1
 	else
@@ -43,6 +43,7 @@ if [ "$api_change" == 0 ] ; then
 	printf "Building API %-23s"
 	go build
 	print_result
+	# TODO Fix this, cannot copy this unless service is stopped
 	cp api kcapp-api
 fi
 
