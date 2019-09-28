@@ -9,8 +9,10 @@ To use these scripts create the following in `/usr/local/bin/`
 ```bash
 #!/bin/bash
 export SLACK_KEY="<slack_key>"
+export SLACK_CHANNEL="<channel>"
+export ANNOUNCE=true
 
-cd $KCAPP_ROOT/enhancements/announcer
+cd $KCAPP_ROOT/announcer
 node kcapp-announcer.js <office_id>
 ```
 
