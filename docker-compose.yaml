@@ -1,0 +1,53 @@
+version: '3.6'
+services:
+  db:
+    image: linuxserver/mariadb:110.4.12mariabionic-ls59
+    #command: mysqld --sql_mode=""
+    restart: always
+    ports:
+      - '3366:3306'
+    expose:
+      - '3366'
+    volumes:
+      - db_config:/config
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: 'kcapp'
+      MYSQL_USER: 'kcapp'
+      MYSQL_PASSWORD: 'abcd1234'
+      MYSQL_ROOT_PASSWORD: 'abcd1234'
+  migration:
+    image: kcapp/api:1.0.0
+    command: [ "./wait-for-it.sh", "db:3306", "--", "./run_migrations.sh" ]
+    depends_on:
+      - db
+    environment:
+      DB_CONNECTION: 'kcapp:abcd1234@tcp(db:3306)/kcapp?parseTime=true'
+      MYSQL_ROOT_PASSWORD: abcd1234
+      MYSQL_DATABASE: kcapp
+  api:
+    image: kcapp/api:1.0.0
+    restart: always
+    ports:
+      - '8001:8001'
+    expose:
+      - '8001'
+    depends_on:
+      - migration
+      - db
+    command: [ "./wait-for-it.sh", "db:3306", "--", "/go/bin/api" ]
+  frontend:
+    image: kcapp/frontend:1.0.0
+    restart: always
+    ports:
+      - '3000:3000'
+    expose:
+      - '3000'
+    depends_on:
+      - api
+    environment:
+      - DEBUG=kcapp*
+      - KCAPP_API
+volumes:
+  db:
+  db_config:
