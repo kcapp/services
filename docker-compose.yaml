@@ -17,7 +17,7 @@ services:
       MYSQL_PASSWORD: 'abcd1234'
       MYSQL_ROOT_PASSWORD: 'abcd1234'
   migration:
-    image: kcapp/api:1.0.0
+    image: kcapp/api:$KCAPP_API_VERSION
     command: [ "./wait-for-it.sh", "db:3306", "--", "./run_migrations.sh" ]
     depends_on:
       - db
@@ -26,7 +26,7 @@ services:
       MYSQL_ROOT_PASSWORD: abcd1234
       MYSQL_DATABASE: kcapp
   api:
-    image: kcapp/api:1.0.0
+    image: kcapp/api:$KCAPP_API_VERSION
     restart: always
     ports:
       - '8001:8001'
@@ -37,17 +37,21 @@ services:
       - db
     command: [ "./wait-for-it.sh", "db:3306", "--", "/go/bin/api" ]
   frontend:
-    image: kcapp/frontend:1.0.0
+    image: kcapp/frontend:$KCAPP_FRONTEND_VERSION
     restart: always
     ports:
       - '3000:3000'
     expose:
       - '3000'
+    volumes:
+      - frontend_cache:/.cache
     depends_on:
       - api
     environment:
       - DEBUG=kcapp*
       - KCAPP_API
+      - DISK_CACHE
 volumes:
   db:
   db_config:
+  frontend_cache:
