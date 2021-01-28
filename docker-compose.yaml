@@ -5,33 +5,33 @@ services:
     #command: mysqld --sql_mode=""
     restart: always
     ports:
-      - '3366:3306'
+      - "${MYSQL_LISTEN_ADDR}:${MYSQL_LISTEN_PORT}:3306"
     expose:
-      - '3366'
+      - ${MYSQL_LISTEN_PORT}
     volumes:
       - db_config:/config
       - db:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: 'kcapp'
-      MYSQL_USER: 'kcapp'
-      MYSQL_PASSWORD: 'abcd1234'
-      MYSQL_ROOT_PASSWORD: 'abcd1234'
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   migration:
     image: kcapp/api:$KCAPP_API_VERSION
     command: [ "./wait-for-it.sh", "db:3306", "--", "./run_migrations.sh" ]
     depends_on:
       - db
     environment:
-      DB_CONNECTION: 'kcapp:abcd1234@tcp(db:3306)/kcapp?parseTime=true'
-      MYSQL_ROOT_PASSWORD: abcd1234
-      MYSQL_DATABASE: kcapp
+      DB_CONNECTION: "${MYSQL_USER}:${MYSQL_PASSWORD}@tcp(db:3306)/${MYSQL_DATABASE}?parseTime=true"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
   api:
     image: kcapp/api:$KCAPP_API_VERSION
     restart: always
     ports:
-      - '8001:8001'
+      - "${API_LISTEN_ADDR}:${API_LISTEN_PORT}:8001"
     expose:
-      - '8001'
+      - ${API_LISTEN_PORT}
     depends_on:
       - migration
       - db
@@ -40,9 +40,9 @@ services:
     image: kcapp/frontend:$KCAPP_FRONTEND_VERSION
     restart: always
     ports:
-      - '3000:3000'
+      - "${KCAPP_FRONTEND_LISTEN_ADDR}:${KCAPP_FRONTEND_LISTEN_PORT}:3000"
     expose:
-      - '3000'
+      - ${KCAPP_FRONTEND_LISTEN_PORT}
     volumes:
       - frontend_cache:/.cache
     depends_on:
