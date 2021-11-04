@@ -62,7 +62,11 @@ print_result() {
 # Prerequisites
 # ===================================
 INSTALL_DIRECTORY=${1:-$PWD}
-INSTALL_DIRECTORY=${INSTALL_DIRECTORY%/}/kcapp
+if [ ! -d $1 ] ; then
+    INSTALL_DIRECTORY=$PWD/${INSTALL_DIRECTORY%/}/kcapp
+else
+    INSTALL_DIRECTORY=${INSTALL_DIRECTORY%/}/kcapp
+fi
 EXEC_DIRECTORY=/usr/local/bin
 INSTALL=true
 echo -e "  _                               _           _        _ _\n | |                             (_)         | |      | | |\n | | _____ __ _ _ __  _ __ ______ _ _ __  ___| |_ __ _| | | ___ _ __\n | |/ / __/ _\` | '_ \| '_ \______| | '_ \/ __| __/ _\` | | |/ _ \ '__|\n |   < (_| (_| | |_) | |_) |     | | | | \__ \ || (_| | | |  __/ |\n |_|\_\___\__,_| .__/| .__/      |_|_| |_|___/\__\__,_|_|_|\___|_|\n               | |   | |\n               |_|   |_|\n"
@@ -86,7 +90,7 @@ if [ -d "$INSTALL_DIRECTORY" ]; then
 else
     yesno "Will install kcapp into \e[34m$INSTALL_DIRECTORY\e[39m"
     printf "Creating directory '$INSTALL_DIRECTORY'"
-    mkdir $INSTALL_DIRECTORY
+    mkdir -p $INSTALL_DIRECTORY
     print_result
 fi
 
@@ -107,7 +111,7 @@ if [ "$INSTALL" = true ] ; then
 
     # Run migrations
     echo "Running database migrations"
-    cd $INSTALL_DIRECTORY/database/migrations/
+    cd migrations/
     goose mysql "kcapp:abcd1234@tcp(localhost:3366)/kcapp?parseTime=true" up
 
     # Insert some required data
