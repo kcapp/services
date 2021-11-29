@@ -1,0 +1,12 @@
+[Unit]
+Description=kcapp-nfc-service
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/kcapp-nfc
+Restart=on-failure
