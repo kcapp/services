@@ -42,5 +42,4 @@ RED=27 GREEN=17 BLUE=22 KCAPP_API=<HOST> PORT=<PORT> DEBUG=kcapp* npm start
 cd $KCAPP_ROOT/nfc
 DEBUG=kcapp* npm start
 KCAPP_API=<HOST> PORT=<PORT> VENUE_ID=<VENUE_ID> DEBUG=kcapp* npm start
-
 ```

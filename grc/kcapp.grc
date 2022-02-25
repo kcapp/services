@@ -1,0 +1,55 @@
+# kcapp.log
+# date
+regexp=(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)
+colours=cyan
+count=more
+.........
+# logger
+regexp=(kcapp:[\w-]+)
+colours=green
+count=once
+.........
+# match id
+regexp=\[(\d+)\]
+colours=none
+count=more
+.........
+# json
+regexp=\{.+\}
+colours=white
+count=once
+.........
+# json attributes
+regexp="\w+":
+colours=blue
+count=more
+.........
+# Quote "
+regexp="
+colours=green
+count=more
+.........
+# ip
+regexp=(::ffff:)?\d+\.\d+\.\d+\.\d+
+colours=yellow
+count=more
+.........
+# namespace
+regexp=/legs/\d+
+colours=red
+count=once
+.........
+# Brackets [,]
+regexp=\[|\]
+colours=cyan
+count=more
+.........
+# Curley Brackets {,}
+regexp=\{|\}
+colours=green
+count=more
+.........
+# Colon :
+regexp=:
+colours=default
+count=more

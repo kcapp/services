@@ -100,6 +100,7 @@ fi
 # ===================================
 echo -e "\n  _____  ____  \n |  __ \|  _ \ \n | |  | | |_) |\n | |  | |  _ < \n | |__| | |_) |\n |_____/|____/ \n"
 if [ "$INSTALL" = true ] ; then
+    # TODO Check if database already exist, and ask to delete it?
     git_clone "https://github.com/kcapp/database" $INSTALL_DIRECTORY/database
     cd $INSTALL_DIRECTORY/database
     echo "Starting database..."
