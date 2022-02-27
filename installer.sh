@@ -140,6 +140,15 @@ if [ "$INSTALL" = true ] ; then
     cd $INSTALL_DIRECTORY/api
     echo "Installing API dependencies"
     eval "go get ./... > /dev/null 2>&1"
+    echo "Updating api config"
+    eval "echo -e 'db:
+  address: localhost
+  port: 3366
+  username: kcapp
+  password: abcd1234
+  schema: kcapp
+api:
+  port: 8001' > $INSTALL_DIRECTORY/api/config/config.yaml"
 else
     git_pull $INSTALL_DIRECTORY/api
     api_change=$(echo $?)
