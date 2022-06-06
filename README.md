@@ -26,7 +26,7 @@ sudo ln -s $GOPATH/bin/kcapp-api /usr/local/bin
 ```bash
 #!/bin/bash
 cd $KCAPP_ROOT/frontend
-DEBUG=kcapp:* npm start &>> log/kcapp.log
+DEBUG=kcapp* npm run prod &>> log/kcapp.log
 ```
 
 ### [kcapp-colors](https://github.com/kcapp/colors)

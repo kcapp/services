@@ -1,0 +1,3 @@
+#!/bin/bash
+cd $KCAPP_ROOT/odds-game
+DEBUG=kcapp* node kcapp-sio-updater.js

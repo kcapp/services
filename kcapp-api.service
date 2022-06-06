@@ -1,5 +1,5 @@
 [Unit]
-Description=kcapp-api-ervice
+Description=kcapp-api-service
 After=network.target
 
 [Service]

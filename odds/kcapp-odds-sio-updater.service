@@ -1,0 +1,9 @@
+[Unit]
+Description=kcapp-odds-sio-updater-service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/kcapp-odds-sio-updater
+Restart=on-failure

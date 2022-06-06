@@ -1,0 +1,3 @@
+#!/bin/bash
+cd $KCAPP_ROOT/frontend
+KCAPP_API_PATH=/api DEBUG=kcapp* npm run prod &>> log/kcapp.log
