@@ -1,0 +1,56 @@
+(defcfg
+  ;; For Linux
+  input  (device-file "/dev/input/by-id/usb-MOSART_Semi._2.4G_Keyboard_Mouse-event-kbd")
+  output (uinput-sink "KMonad for Bluetooth Numpad"
+    "/bin/sleep 1 && /usr/bin/setxkbmap -option compose:ralt")
+  cmp-seq ralt
+  cmp-seq-delay 5
+
+  fallthrough true
+  allow-cmd false
+)
+
+#| --------------------------------------------------------------------------
+                          Bluetooth Numeric Numpad
+  --------------------------------------------------------------------------
+  (deflayer empty
+    _  _  _  _
+    _  _  _  _
+    _  _  _  _
+    _  _  _  _
+    _  _  _
+  )
+  |#
+(defsrc
+  nlck kp/  kp*  bspc
+  kp7  kp8  kp9  kp-
+  kp4  kp5  kp6  kp+
+  kp1  kp2  kp3  kprt
+  tab  kp0  kp.
+)
+
+(defalias
+  advc  (layer-toggle advanced)  ;; NumLock will switch to advanced layer ...
+  swch  (tap-hold 200 kp. @advc) ;; swch will either emit a "." when pressed and switch to advanced layer while held
+  cko   f2                       ;; Define F2 as "Checkout"
+  sme   f3                       ;; Define F1 as "Same as pervious"
+)
+
+(deflayer standard
+  nlck kp/  kp*  bspc
+  kp7  kp8  kp9  kp-
+  kp4  kp5  kp6  kp+
+  kp1  kp2  kp3  kprt
+  tab  kp0  @swch
+)
+
+
+(deflayer advanced
+  _      _     _     _
+  _      _     _     _
+  _      _     _     _
+  @sme   @cko  _     _
+  _      _     @swch
+)
+
+
