@@ -1,21 +1,37 @@
 version: '3.6'
 services:
   db:
-    image: linuxserver/mariadb:110.4.12mariabionic-ls59
+    image: mysql:8.0
     #command: mysqld --sql_mode=""
+    command: --sql_mode="" --default-authentication-plugin=mysql_native_password
     restart: always
-    ports:
-      - "${MYSQL_LISTEN_ADDR}:${MYSQL_LISTEN_PORT}:3306"
-    expose:
-      - ${MYSQL_LISTEN_PORT}
-    volumes:
-      - db_config:/config
-      - db:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_DATABASE:  ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${MYSQL_LISTEN_PORT}:3306"
+    expose:
+      - ${MYSQL_LISTEN_PORT}
+    volumes:
+      - db:/var/lib/mysql
+  # db:
+  #   image: linuxserver/mariadb:110.4.12mariabionic-ls59
+  #   #command: mysqld --sql_mode=""
+  #   restart: always
+  #   ports:
+  #     - "${MYSQL_LISTEN_ADDR}:${MYSQL_LISTEN_PORT}:3306"
+  #   expose:
+  #     - ${MYSQL_LISTEN_PORT}
+  #   volumes:
+  #     - db_config:/config
+  #     - db:/var/lib/mysql
+  #   environment:
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #     MYSQL_USER: ${MYSQL_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   migration:
     image: kcapp/api:$KCAPP_API_VERSION
     command: [ "./wait-for-it.sh", "db:3306", "--", "./run_migrations.sh" ]
@@ -35,7 +51,13 @@ services:
     depends_on:
       - migration
       - db
-    command: [ "./wait-for-it.sh", "db:3306", "--", "/go/bin/api" ]
+    environment:
+      DB_CONNECTION: "${MYSQL_USER}:${MYSQL_PASSWORD}@tcp(db:3306)/${MYSQL_DATABASE}?parseTime=true"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    command: [ "./wait-for-it.sh", "db:3306", "--", "/go/bin/api", "/config.yaml" ]
+    volumes:
+      - ./config.yaml:/config.yaml
   frontend:
     image: kcapp/frontend:$KCAPP_FRONTEND_VERSION
     restart: always
