@@ -1,0 +1,12 @@
+[Unit]
+Description=kcapp-odds-api-service
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/kcapp-odds-api /home/t.setsaas/go/src/github.com/kcapp/odds-api/config/config.yaml
+Restart=on-failure

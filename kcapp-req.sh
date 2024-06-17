@@ -6,7 +6,6 @@ print_result() {
             echo -e " - \e[32mDONE\e[39m"
         else
             echo -e " - \e[91mFAILED\e[39m"
-            # TODO Mark deploy as failed, and log out in print_done + exit code
         fi
 }
 
@@ -25,7 +24,7 @@ declare -a PAGES=("/"
         "/tournaments/1"
         "/elo"
         "/offices"
-        "tournaments/admin"
+        "/tournaments/admin"
         "/matches/1/result"
         "/legs/1"
         "/legs/1/result"
@@ -33,7 +32,10 @@ declare -a PAGES=("/"
         "/tournaments/1/player/1"
         "/tournaments/admin"
         "/players/compare"
-        "/controller")
+        "/controller"
+        "/badges"
+        "/badges/1"
+        "/practice")
 
 for PAGE in "${PAGES[@]}"; do
         printf "Requesting %-25s" $PAGE

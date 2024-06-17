@@ -1,5 +1,5 @@
 [Unit]
-Description=kcapp-announcer-service
+Description=kcapp-odds-sio-updater-service
 After=network.target
 
 [Install]
@@ -8,5 +8,5 @@ WantedBy=multi-user.target
 [Service]
 Type=simple
 User=root
-ExecStart=/usr/local/bin/kcapp-announcer
+ExecStart=/usr/local/bin/kcapp-odds-sio-updater
 Restart=on-failure
