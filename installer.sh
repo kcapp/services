@@ -77,8 +77,8 @@ required go
 required node
 required npm
 required docker
-required docker-compose
-required mysqlsh
+#required docker-compose
+#required mysqlsh
 required goose
 print_result
 
@@ -104,7 +104,7 @@ if [ "$INSTALL" = true ] ; then
     git_clone "https://github.com/kcapp/database" $INSTALL_DIRECTORY/database
     cd $INSTALL_DIRECTORY/database
     echo "Starting database..."
-    docker-compose --log-level CRITICAL up -d
+    docker-compose up -d
     exit_code "docker-compose"
 
     # Wait for database to start
@@ -116,9 +116,9 @@ if [ "$INSTALL" = true ] ; then
     goose mysql "kcapp:abcd1234@tcp(localhost:3366)/kcapp?parseTime=true" up
 
     # Insert some required data
-    mysqlsh -u kcapp -pabcd1234 localhost:3366/kcapp --sql << EOF
-    INSERT INTO office(id, \`name\`, is_active) VALUES (1, 'Test', 1);
-EOF
+    #mysqlsh -u kcapp -pabcd1234 localhost:3366/kcapp --sql << EOF
+    #INSERT INTO office(id, \`name\`, is_active) VALUES (1, 'Test', 1);
+    #EOF
 
 else
     git_pull $INSTALL_DIRECTORY/database
