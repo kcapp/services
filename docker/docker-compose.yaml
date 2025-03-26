@@ -1,4 +1,3 @@
-version: '3.6'
 services:
   nginx:
     container_name: nginx
@@ -9,6 +8,7 @@ services:
       - 80:80
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
+
   db:
     image: linuxserver/mariadb:${MYSQL_VERSION:-10.11.10}
     hostname: db
@@ -26,6 +26,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
   migration:
     image: kcapp/api:$KCAPP_API_VERSION
     hostname: migration
@@ -49,9 +50,12 @@ services:
     depends_on:
       - migration
       - db
+    environment:
+      KCAPP_DB_SCHEMA: ${MYSQL_DATABASE}
+      KCAPP_DB_USERNAME: ${MYSQL_USER}
+      KCAPP_DB_PASSWORD: ${MYSQL_PASSWORD}
     command: [ "./wait-for-it.sh", "db:3306", "--", "/go/bin/api" ]
-#   command: [ "./wait-for-it.sh", "db:3306", "--", "/go/bin/api statistics recalculate x01 --dry-run=false" ]
-  
+
   frontend:
     image: kcapp/frontend:$KCAPP_FRONTEND_VERSION
     hostname: frontend
