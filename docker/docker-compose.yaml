@@ -6,11 +6,13 @@ services:
     image: nginx
     ports:
       - 80:80
+    depends_on:
+      - frontend
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
 
   db:
-    image: linuxserver/mariadb:${MYSQL_VERSION:-10.11.10}
+    image: linuxserver/mariadb:${MYSQL_VERSION:-11.4.5}
     hostname: db
     container_name: db
     restart: unless-stopped
